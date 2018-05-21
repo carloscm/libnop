@@ -31,6 +31,11 @@ class BufferReader {
  public:
   constexpr BufferReader() = default;
   constexpr BufferReader(const BufferReader&) = default;
+  template <std::size_t Size>
+  constexpr BufferReader(const std::uint8_t (&buffer)[Size])
+      : buffer_{buffer}, size_{Size} {}
+  constexpr BufferReader(const std::uint8_t* buffer, std::size_t size)
+      : buffer_{buffer}, size_{size} {}
   constexpr BufferReader(const void* buffer, std::size_t size)
       : buffer_{static_cast<const std::uint8_t*>(buffer)}, size_{size} {}
 
@@ -62,8 +67,8 @@ class BufferReader {
     if (length_bytes > (size_ - index_))
       return ErrorStatus::ReadLimitReached;
 
-    for (std::size_t i=0; i < length_bytes; i++)
-    	begin_byte[i] = buffer_[index_ + i];
+    for (std::size_t i = 0; i < length_bytes; i++)
+      begin_byte[i] = buffer_[index_ + i];
 
     index_ += length_bytes;
     return {};

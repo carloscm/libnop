@@ -32,6 +32,11 @@ class BufferWriter {
  public:
   constexpr BufferWriter() = default;
   constexpr BufferWriter(const BufferWriter&) = default;
+  template <std::size_t Size>
+  constexpr BufferWriter(std::uint8_t (&buffer)[Size])
+      : buffer_{buffer}, size_{Size} {}
+  constexpr BufferWriter(std::uint8_t* buffer, std::size_t size)
+      : buffer_{buffer}, size_{size} {}
   constexpr BufferWriter(void* buffer, std::size_t size)
       : buffer_{static_cast<std::uint8_t*>(buffer)}, size_{size} {}
 
