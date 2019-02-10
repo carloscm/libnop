@@ -1,3 +1,35 @@
+## WIP fork adding VS2017 support and other portability changes
+
+Microsoft C++ compiler has matured a lot and is now able to tackle codebases
+like this one. Most of the changes are related to the lack of some GCC/clang
+extensions.
+
+### Important caveats
+
+To compile with VS2017 the new experimental preprocessor must be enabled for
+all the compilation units that include libnop headers. This new preprocessor
+gives warnings with the built-in C and Windows platform headers, so I recommend
+to use libnop external struct/table serializers and concentrate all the code
+in a single file, then enabling the new preprocessor just for that one file.
+
+The new preprocessor is enabled with the /experimental:preprocessor command
+line option (right click a file or project, go into C/C++ -> Command Line,
+input in Additional Options). You must also enable C++17 mode in C/C++ ->
+Language (I haven't tested any lower version). Finally a very recent version
+of VS2017 is required, I'm using 15.9.6.
+
+### Changes so far
+
+  * Remove use of `...` in switch case
+  * Put `[[gnu::used]]` behind a macro
+  * Put `__has_cpp_attribute` behind a macro
+  * Do not use accessors like &VectorVal[VectorLen] or &ArrayVal[ArrayLen] to
+    get a pointer just after the end of the memory block for those types. This
+    can trigger debug asserts inside operator[] in some STL implementations.
+  * Fix an apparent bug in the writer method for the integral version of
+    std::array
+
+
 # libnop: C++ Native Object Protocols
 
 libnop is a header-only library for serializing and deserializing C++ data
