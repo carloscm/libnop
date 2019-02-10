@@ -143,7 +143,7 @@ struct Encoding<std::vector<T, Allocator>, EnableIfIntegral<T>>
     if (!status)
       return status;
 
-    return writer->Write(&value[0], &value[length]);
+    return writer->Write(&value[0], &value[0] + length);
   }
 
   template <typename Reader>
@@ -166,7 +166,7 @@ struct Encoding<std::vector<T, Allocator>, EnableIfIntegral<T>>
       return status;
 
     value->resize(length);
-    return reader->Read(&(*value)[0], &(*value)[length]);
+    return reader->Read(&(*value)[0], &(*value)[0] + length);
   }
 };
 
