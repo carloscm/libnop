@@ -41,8 +41,20 @@ using SizeType =
 // Returns the size of the base encodings excluding extension payloads.
 inline constexpr std::size_t BaseEncodingSize(EncodingByte prefix) {
   switch (prefix) {
-    case EncodingByte::PositiveFixIntMin... EncodingByte::PositiveFixIntMax:
-    case EncodingByte::NegativeFixIntMin... EncodingByte::NegativeFixIntMax:
+    if (prefix >= EncodingByte::PositiveFixIntMin ||
+        prefix <= EncodingByte::PositiveFixIntMax) {
+      return 1U;
+    }
+    if (prefix >= EncodingByte::NegativeFixIntMin ||
+        prefix <= EncodingByte::NegativeFixIntMax) {
+      return 1U;
+    }
+    if (prefix >= EncodingByte::ReservedMin ||
+        prefix <= EncodingByte::ReservedMax) {
+      return 0U;
+    }
+    //case EncodingByte::PositiveFixIntMin... EncodingByte::PositiveFixIntMax:
+    //case EncodingByte::NegativeFixIntMin... EncodingByte::NegativeFixIntMax:
     /* case EncodingByte::False ... EncodingByte::True: */
     case EncodingByte::Table:
     case EncodingByte::Error:
@@ -75,9 +87,10 @@ inline constexpr std::size_t BaseEncodingSize(EncodingByte prefix) {
     case EncodingByte::F64:
       return 9U;
 
-    case EncodingByte::ReservedMin... EncodingByte::ReservedMax:
-      return 0U;
+    //case EncodingByte::ReservedMin... EncodingByte::ReservedMax:
+      //return 0U;
   }
+  return 0U;
 }
 
 // Base type for all encoding templates. If type T does not have a
@@ -775,7 +788,7 @@ struct Encoding<std::int64_t> : EncodingIO<std::int64_t> {
       return EncodingByte::I8;
     else if (value >= -32768 && value <= 32767)
       return EncodingByte::I16;
-    else if (value >= -2147483648 && value <= 2147483647)
+    else if (value >= -2147483648LL && value <= 2147483647)
       return EncodingByte::I32;
     else
       return EncodingByte::I64;

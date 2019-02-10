@@ -71,7 +71,7 @@ namespace nop {
     using MemberList = ::nop::MemberList<_NOP_MEMBER_LIST(type, __VA_ARGS__)>; \
   };                                                                           \
   inline NOP__MEMBER_TRAITS<type> NOP__GetExternalMemberTraits                 \
-      [[gnu::used]] (type*) {                                                  \
+      NOP_GNU_USED (type*) {                                                  \
     return {};                                                                 \
   }
 
@@ -86,7 +86,7 @@ namespace nop {
   };                                                                   \
   template <typename... Ts>                                            \
   inline NOP__MEMBER_TRAITS<type<Ts...>> NOP__GetExternalMemberTraits  \
-      [[gnu::used]] (type<Ts...>*) {                                   \
+      NOP_GNU_USED(type<Ts...>*) {                                   \
     return {};                                                         \
   }
 

@@ -25,13 +25,19 @@
 #define __has_cpp_attribute(x) 0
 #endif
 
+#ifdef _MSC_VER
+#define NOP_FALLTHROUGH
+#define NOP_GNU_USED
+#else
 // Test for fallthrough support.
+#define NOP_GNU_USED [[gnu::used]]
 #if __has_cpp_attribute(clang::fallthrough)
 #define NOP_FALLTHROUGH [[clang::fallthrough]]
 #elif NOP_GCC_VERSION >= 70000
 #define NOP_FALLTHROUGH [[fallthrough]]
 #else
 #define NOP_FALLTHROUGH
+#endif
 #endif
 
 #endif  // LIBNOP_INCLUDE_NOP_UTILITY_COMPILER_H_
